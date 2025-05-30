@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Proyecto UMG Gym</title>
+</head>
+<body style="text-align: center; font-family: sans-serif; background-color: #1d68ff;">
+
+  <h1>
+    <img src="https://styles.redditmedia.com/t5_2r9x1/styles/communityIcon_gy5ud2s0doze1.png" 
+         alt="imagen incentiva para ejercitarse" width="100"><br>
+    Proyecto UMG Gym
+  </h1>
+
+  <h2>Qué ejercicios tocarán hoy en el gimnasio? <style></style></h2>
+  <p>Escribe algún día de la semana para decirte cuál es tu rutina! 😊😊😊</p>
+
+  <label for="diaInput">Día:</label><br>
+  <input type="text" id="diaInput" placeholder="Escribe un día" />
+  <button onclick="mostrarRutina()">Consultar</button>
+
+  <div id="resultado" style="margin-top: 20px;"></div>
+
+  <script>
+    const rutinas = {
+      "lunes": ["Pecho", "Tríceps", "Abdominales"],
+      "martes": ["Espalda", "Bíceps"],
+      "miercoles": ["Piernas", "Glúteos"],     
+      "miércoles": ["Piernas", "Glúteos"],   
+      "jueves": ["Hombros", "Trapecio"],        
+      "viernes": ["Full Body", "Cardio"],     
+      "sabado": ["Cardio", "Estiramientos"],   
+      "sábado": ["Cardio", "Estiramientos"],    
+      "domingo": ["Descanso o Yoga"]
+    };
+
+    const rutinasDetalladas = {
+      // Lunes
+      "Abdominales": [
+        "Saltos de tijera por 30 segundos",
+        "Abdominales por 20 repeticiones",
+        "Puente lateral izquierdo por 20 rep y derecho por 20 rep",
+        "Crunch abdominal por 30 segundos",
+        "Plancha lado derecho e izquierdo por 20 seg",
+        "Abdominales en 'V' por 15 repeticiones",
+        "Flexiones por 24 repeticiones",
+        "Twist ruso por 48 repeticiones"
+      ],
+      
+      // Martes
+      "Bíceps": [
+        "Burpees por 16 repeticiones",
+        "Tríceps en el suelo por 18 reps",
+        "Fondos militares por 14 reps",
+        "Tumbado por 30 segundos",
+        "Flexiones brazo izquierdo y derecho por 18 reps",
+        "Flexión bícep izquierdo y derecho por 12 reps",
+        "Giro de hombros por 16 reps",
+        "Ganchos alternos por 30 segundos"
+      ],
+      
+      // Miércoles 
+      "Piernas": [
+      "Sentadillas por 30 rep",
+      "Saltos por 1 min",
+      "Estiramiento por 2 min",
+      "trote suave por 5 min",
+      "correr por 2 km",
+      "vuelta a una cancha"
+      ],
+      
+      // Jueves 
+      "Hombros": [
+       "estiramiento hombros por 30 seg",
+       "Burpees por 10 rep",
+       "Flexion y rotacion por 12 rep"
+      ],
+      "Trapecio": [
+       "encogimiento con monenclatura",
+       "Flexiones spiderman por 20 rep"
+      ],
+      
+      // Viernes 
+      "Full Body": [
+      "Salto de tijera por 20 seg",
+      " flexiones en pica por 14 rep",
+      "Postura de gato vaca por 30 seg",
+      "Angel de nieve invertido por 12 reps",
+
+      ],
+      "Cardio": [
+       "Saltos de payasito por 30 seg",
+       "flexiones inversas por 15 reps",
+       "salto con cuerda por 3 min"
+      ],
+      
+      // Sábado 
+      "Estiramientos": [
+      "estiramiento de brazos y piernas",
+      "posturas de estiramiento"
+      ]
+    };
+
+    const imagenes = {
+      "Pecho": "https://cdn-icons-png.flaticon.com/256/5689/5689033.png",
+      "Tríceps": "https://cdn-icons-png.freepik.com/256/2518/2518763.png",
+      "Abdominales": "https://play-lh.googleusercontent.com/F3g--X2roFmKT3CbyWGzq3I3KlI_KyISlVD_gzU8OZVJw0g5WjOQ3LMAX_udGCmBnng=w256",
+      "Espalda": "https://cdn-icons-png.flaticon.com/256/5141/5141157.png",
+      "Bíceps": "https://cdn-icons-png.freepik.com/256/1845/1845861.png",
+      "Piernas": "https://cdn-icons-png.freepik.com/256/5978/5978190.png",
+      "Glúteos": "https://solutionfitness.mx/wp-content/uploads/2024/08/como-es-la-progresion-en-el-entrenamiento-fisico-thegem-post-thumb-large.webp",
+      "Hombros": "https://cdn-icons-png.flaticon.com/256/17625/17625153.png",
+      "Trapecio": "https://styles.redditmedia.com/t5_2glcdm/styles/communityIcon_jvm6ea5m4vh61.png",
+      "Full Body": "https://cdn.iconscout.com/icon/premium/png-256-thumb/full-body-muscle-6241555-5128251.png.jpg",
+      "Cardio": "https://s.cafebazaar.ir/images/icons/com.fitifyapps.bwcardio-9beb8947-0a9b-462a-aa3c-20a19adb8b7b_512x512.webp?x-img=v1/resize,h_256,w_256,lossless_false/optimize",
+      "Estiramientos": "https://cdn-icons-png.flaticon.com/256/10/10941.png",
+      "Descanso o Yoga": "https://images.cdn.kukufm.com/w:256/f:webp/q:50/https://images.cdn.kukufm.com/f:webp/https://s3.ap-south-1.amazonaws.com/kukufm/channel_icons/26c08d0ce3444311ab1ea8ab3605e3ae.png"
+    };
+
+    const input = document.getElementById("diaInput");
+    const resultado = document.getElementById("resultado");
+
+    function mostrarRutina() {
+      const dia = input.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const ejercicios = rutinas[dia];
+
+      if (ejercicios) {
+        let html = `<h3>Rutina para ${dia.charAt(0).toUpperCase() + dia.slice(1)}</h3><div style="max-width: 600px; margin: 0 auto;">`;
+        
+        ejercicios.forEach(ejercicio => {
+          const imagen = imagenes[ejercicio];
+          
+          html += `<div class="ejercicio-container">
+                    <h4>${ejercicio}</h4>`;
+          
+          if (imagen) {
+            html += `<img src="${imagen}" width="200" style="max-width: 100%; height: auto; margin: 10px 0;">`;
+          }
+          
+          if (rutinasDetalladas[ejercicio] && rutinasDetalladas[ejercicio].length > 0) {
+            html += `<div class="rutina-detalle">
+                      <h4>Rutina detallada:</h4>
+                      <ol>`;
+            
+            rutinasDetalladas[ejercicio].forEach(item => {
+              html += `<li>${item}</li>`;
+            });
+            
+            html += `</ol></div>`;
+          } else {
+            html += `<p style="color: #666; font-style: italic;"></p>`;
+          }
+          
+          html += `</div>`;
+        });
+        
+        html += "</div>";
+        resultado.innerHTML = html;
+      } else {
+        resultado.innerHTML = "<p style='color:red;'>Ese día no está en la rutina.</p>";
+      }
+    }
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        mostrarRutina();
+      }
+    });
+  </script>
+
+</body>
+</html>
